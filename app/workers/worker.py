@@ -43,7 +43,7 @@ def run_worker():
             task.result = result
             db.commit()
 
-            print(f"Task {task.id} completed")
+            print(f"[Worker] Task {task.id} completed with type {task.job_type}")
 
         except Exception as error:
             if task:

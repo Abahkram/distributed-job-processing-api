@@ -17,3 +17,8 @@ Base.metadata.create_all(bind=engine)
 @app.get("/")
 def root():
     return {"message": "Job Processing API is running"}
+
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
