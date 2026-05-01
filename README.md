@@ -1,35 +1,33 @@
 # Distributed Job Processing API
 
-
-Backend service for asynchromus job processing using Redis queue and worker architecture.
+Backend service for asynchronous job processing using Redis queue and worker architecture.
 
 ## Architecture
 
 ```
 Client → FastAPI → Redis Queue → Worker → Database
+```
 
 ## Features
 
 - Create background jobs via REST API
 - Track job status (pending, running, completed, failed)
-- Multiple job types:
+- Support multiple job types:
   - report_generation
   - data_import
   - email_sending
 - Redis queue for task distribution
-- Separate worker for processing jobs
+- Background worker for processing jobs
 
-## API
+## API Endpoints
 
 ### Create Job
 POST /tasks
-
 
 ```json
 {
   "job_type": "data_import"
 }
-
 ```
 
 ### Get Job
@@ -40,7 +38,7 @@ GET /tasks
 
 ## Job Lifecycle
 
-```text
+```
 pending → running → completed
 ```
 
@@ -78,14 +76,4 @@ python -m app.workers.worker
   "job_type": "data_import",
   "result": "Data imported successfully"
 }
-```
-
-
-
-## API Documentation
-
-After running the server, open:
-
-```text
-http://127.0.0.1:8000/docs
 ```
