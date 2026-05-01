@@ -1,24 +1,30 @@
 # Distributed Job Processing API
 
-Backend service for submitting and processing background jobs asynchronously.
+
+Backend service for asynchromus job processing using Redis queue and worker architecture.
+
+## Architecture
+
+```
+Client → FastAPI → Redis Queue → Worker → Database
 
 ## Features
 
 - Create background jobs via REST API
 - Track job status (pending, running, completed, failed)
-- Support for multiple job types:
+- Multiple job types:
   - report_generation
   - data_import
   - email_sending
-- Asynchronous processing using FastAPI background tasks
-- SQLite database with SQLAlchemy ORM
+- Redis queue for task distribution
+- Separate worker for processing jobs
 
-## API Endpoints
+## API
 
 ### Create Job
 POST /tasks
 
-Request:
+
 ```json
 {
   "job_type": "data_import"
@@ -26,7 +32,7 @@ Request:
 
 ```
 
-### Get Job by ID
+### Get Job
 GET /tasks/{id}
 
 ### Get All Jobs
@@ -44,12 +50,37 @@ pending → running → completed
 - FastAPI
 - SQLAlchemy
 - SQLite
+- Redis
 
 ## How to Run
 
+### 1. Start Redis
+```bash
+redis-server
+```
+
+### 2. Run API
 ```bash
 uvicorn app.main:app --reload
 ```
+
+### 3. Run Worker
+```bash
+python -m app.workers.worker
+```
+
+## Example Response
+
+```json
+{
+  "id": 1,
+  "status": "completed",
+  "job_type": "data_import",
+  "result": "Data imported successfully"
+}
+```
+
+
 
 ## API Documentation
 
