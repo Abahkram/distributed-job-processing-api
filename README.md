@@ -1,79 +1,90 @@
 # Distributed Job Processing API
 
-Backend service for asynchronous job processing using Redis queue and worker architecture.
+A backend system for asynchronous task processing built with FastAPI, PostgreSQL, Redis, and Docker Compose.
 
-## Architecture
+## Overview
 
-```
-Client → FastAPI → Redis Queue → Worker → Database
-```
+This project demonstrates a distributed background job processing architecture where tasks are submitted through a REST API, placed into a Redis queue, processed by a worker service, and stored in PostgreSQL.
 
-## Features
+The system simulates real-world backend workflows such as:
+- report generation
+- data imports
+- email processing
+- asynchronous background jobs
 
-- Create background jobs via REST API
-- Track job status (pending, running, completed, failed)
-- Support multiple job types:
-  - report_generation
-  - data_import
-  - email_sending
-- Redis queue for task distribution
-- Background worker for processing jobs
+---
 
-## API Endpoints
-
-### Create Job
-POST /tasks
-
-```json
-{
-  "job_type": "data_import"
-}
-```
-
-### Get Job
-GET /tasks/{id}
-
-### Get All Jobs
-GET /tasks
-
-## Job Lifecycle
-
-```
-pending → running → completed
-```
-
-## Tech Stack
+# Tech Stack
 
 - Python
 - FastAPI
-- SQLAlchemy
-- SQLite
+- PostgreSQL
 - Redis
+- SQLAlchemy
+- Docker Compose
+- Uvicorn
 
-## How to Run
+---
 
-### 1. Start Redis
-```bash
-redis-server
-```
+# Features
 
-### 2. Run API
-```bash
-uvicorn app.main:app --reload
-```
+- Create background jobs through REST API
+- Queue-based task processing with Redis
+- Worker service for asynchronous execution
+- PostgreSQL persistence
+- Task lifecycle management:
+  - pending
+  - running
+  - completed
+  - failed
+- Dockerized infrastructure
+- Swagger/OpenAPI documentation
 
-### 3. Run Worker
-```bash
-python -m app.workers.worker
-```
+---
 
-## Example Response
+# Architecture
 
-```json
+Client → FastAPI API → Redis Queue → Worker → PostgreSQL
+
+---
+
+# API Endpoints
+
+## Create Task
+
+```http
+POST /tasks
+
+Example request:
+
 {
-  "id": 1,
-  "status": "completed",
-  "job_type": "data_import",
-  "result": "Data imported successfully"
+  "job_type": "report_generation"
 }
-```
+
+Supported job types:
+
+report_generation
+data_import
+email_sending
+Get All Tasks
+GET /tasks
+Get Task By ID
+GET /tasks/{task_id}
+Local Development Setup
+Install dependencies
+pip install -r requirements.txt
+Run FastAPI
+uvicorn app.main:app --reload
+Run worker
+python -m app.workers.worker
+Swagger docs
+http://127.0.0.1:8000/docs
+Future Improvements
+JWT authentication
+Retry logic
+Tests
+CI/CD
+Celery integration
+Author
+
+Markhabo Davlatova
