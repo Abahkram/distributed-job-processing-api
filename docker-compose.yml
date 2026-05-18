@@ -1,0 +1,41 @@
+services:
+  api:
+    build: .
+    container_name: api-job-processing
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/jobs_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - postgres
+      - redis
+
+  worker:
+    build: .
+    container_name: worker-job-processing
+    command: python -m app.workers.worker
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/jobs_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - postgres
+      - redis
+
+  redis:
+    image: redis:latest
+    container_name: redis-job-api
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres:17
+    container_name: postgres-job-api
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: jobs_db
+    ports:
+      - "5432:5432"
